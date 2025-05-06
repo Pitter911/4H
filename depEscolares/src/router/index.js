@@ -52,7 +52,7 @@ const router = createRouter({
       component: () => import('@/views/publico/loginInitial.vue'),
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: () => import('@/views/publico/home.vue'),
     },

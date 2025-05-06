@@ -52,6 +52,11 @@ export default {
   background: linear-gradient(90deg, #2196f3, #21cbf3);
   color: white;
   flex-wrap: wrap;
+  position: fixed; /* Fija la barra en su lugar */
+  top: 0; /* Posición en la parte superior */
+  left: 0; /* Alineación a la izquierda */
+  width: 100%; /* Ocupa toda la anchura */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
 }
 
 .navbar-logo img {
