@@ -19,6 +19,12 @@
           <p><strong>Cantidad solicitada:</strong>
             <input v-model.number="herramienta.cantidadSolicitada" type="number" min="1" :max="herramienta.stock" />
           </p>
+
+          <!-- Fecha de devolución -->
+          <p><strong>Fecha de devolución:</strong>
+            <input type="date" v-model="herramienta.fechaDevolucion" min="2025-01-01" />
+          </p>
+
           <button @click="confirmarPrestamo(herramienta)">Confirmar Préstamo</button>
         </div>
       </div>
@@ -35,23 +41,22 @@ export default {
   data() {
     return {
       herramientas: [],
-      isLoggedIn: false, // Verifica si el usuario está autenticado (puedes manejar esto con Vuex o un sistema de autenticación)
+      isLoggedIn: false, // Verifica si el usuario está autenticado
     };
   },
   mounted() {
     // Simulando inicio de sesión
-    // Normalmente esto lo harías con un sistema de autenticación
     setTimeout(() => {
-      this.isLoggedIn = true;  // Cambiar estado para simular que el usuario ha iniciado sesión
-    }, 2000); // Simulamos un retraso de 2 segundos (solo para demostración)
+      this.isLoggedIn = true;
+    }, 2000);
 
     apiService.getHerramientas()
       .then((response) => {
         this.herramientas = response.data.map(herramienta => {
-          // Formatear la fecha
           herramienta.fechaFormateada = format(new Date(herramienta.fechaAgregado), 'dd/MM/yyyy');
-          herramienta.prestamoSolicitado = false; // Inicializamos si se ha solicitado el préstamo
-          herramienta.cantidadSolicitada = 1; // Establecemos la cantidad por defecto
+          herramienta.prestamoSolicitado = false; 
+          herramienta.cantidadSolicitada = 1;
+          herramienta.fechaDevolucion = ''; // Inicializamos el campo de fecha de devolución
           return herramienta;
         });
       })
@@ -60,48 +65,46 @@ export default {
       });
   },
   methods: {
-  getUsuarioId() {
-    // Aquí puedes reemplazar con tu lógica para obtener el ID del usuario logueado
-    // Por ejemplo, si usas Vuex o almacenamiento local
-    return 1; // ID simulado de un usuario
+    getUsuarioId() {
+      return 1; // ID simulado de un usuario
+    },
+
+    solicitarPrestamo(herramienta) {
+      herramienta.prestamoSolicitado = true;
+      this.herramientaSeleccionada = herramienta;
+      if (herramienta.stock <= 0) {
+        alert("No hay stock disponible para préstamo.");
+      }
+    },
+
+    confirmarPrestamo(herramienta) {
+      if (!this.herramientaSeleccionada || !this.herramientaSeleccionada.id) {
+        alert("No se ha seleccionado una herramienta válida.");
+        return;
+      }
+
+      if (!herramienta.fechaDevolucion) {
+        alert("Por favor, selecciona una fecha de devolución.");
+        return;
+      }
+
+      const prestamo = {
+        usuario: { id: this.getUsuarioId() },
+        herramienta: { id: this.herramientaSeleccionada.id },
+        fechaPrestamo: new Date().toISOString().split("T")[0], // formato YYYY-MM-DD
+        fechaDevolucion: herramienta.fechaDevolucion, // Fecha de devolución seleccionada
+        estado: "PENDIENTE"
+      };
+
+      apiService.registrarPrestamo(prestamo)
+        .then(() => {
+          alert("Préstamo solicitado con éxito");
+        })
+        .catch(error => {
+          console.error("Error al registrar préstamo:", error);
+        });
+    },
   },
-
-  solicitarPrestamo(herramienta) {
-    // Marca que se ha solicitado el préstamo
-    herramienta.prestamoSolicitado = true;
-    // Deshabilitar botón de préstamo si el stock es 0
-    if (herramienta.stock <= 0) {
-      alert("No hay stock disponible para préstamo.");
-    }
-  },
-
-  confirmarPrestamo(herramienta) {
-    if (herramienta.cantidadSolicitada <= 0 || herramienta.cantidadSolicitada > herramienta.stock) {
-      alert("Cantidad no válida.");
-      return;
-    }
-
-    const usuarioId = this.getUsuarioId(); // Ahora el método getUsuarioId está definido
-    const fechaPrestamo = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-
-    // Llama a la API para registrar el préstamo
-    apiService.registrarPrestamo({
-      usuario_id: usuarioId,
-      herramienta_id: herramienta.id,
-      fecha_prestamo: fechaPrestamo,
-      estado: 'pendiente'
-    })
-      .then(() => {
-        herramienta.stock -= herramienta.cantidadSolicitada;
-        herramienta.prestamoSolicitado = false;
-        herramienta.cantidadSolicitada = 1;
-        alert("Préstamo confirmado y registrado.");
-      })
-      .catch((error) => {
-        console.error("Error al registrar préstamo:", error);
-      });
-  },
-},
 };
 </script>
 
