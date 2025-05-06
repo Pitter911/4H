@@ -1,40 +1,41 @@
 <template>
   <div class="prestamos-recientes">
-    <h1>Préstamos Recientes</h1>
-    <div v-if="prestamos.length > 0" class="prestamos-list">
-      <div 
-        v-for="(prestamo, index) in prestamos" 
-        :key="index" 
-        class="prestamo-item"
-      >
-        <p><strong>Artículo:</strong> {{ prestamo.articulo }}</p>
-        <p><strong>Fecha:</strong> {{ prestamo.fecha }}</p>
-        <button @click="confirmarPrestamo(index)">Confirmar</button>
-      </div>
-    </div>
-    <div v-else>
-      <p>No tienes préstamos recientes.</p>
-    </div>
+    <h1>Mis Préstamos</h1>
+    <ul v-if="prestamos.length" class="prestamos-list">
+      <li v-for="prestamo in prestamos" :key="prestamo.id" class="prestamo-item">
+        Herramienta: {{ prestamo.herramienta.nombre }}<br />
+        Fecha: {{ format(new Date(prestamo.fecha_prestamo), 'dd/MM/yyyy') }}<br />
+        Estado: <span :class="prestamo.estado">{{ prestamo.estado }}</span>
+      </li>
+    </ul>
+    <p v-else>No tienes préstamos aún.</p>
   </div>
 </template>
 
 <script>
+import apiService from "@/services/apiService";
+import { format } from "date-fns"; // Asegúrate de instalar date-fns si no lo tienes
+console.log("Métodos disponibles:", Object.keys(apiService));
 export default {
   name: "PrestamosRecientes",
   data() {
     return {
-      prestamos: [
-        { articulo: "Libro de Matemáticas", fecha: "2025-05-01" },
-        { articulo: "Calculadora Científica", fecha: "2025-05-02" },
-      ],
+      prestamos: [],
+      usuarioId: 1, // Puedes reemplazarlo por el ID dinámico si usas autenticación
     };
   },
+  mounted() {
+  apiService.getPrestamosPorUsuario(this.usuarioId)
+    .then((response) => {
+      this.prestamos = response.data;
+    })
+    .catch((error) => {
+      console.error("Error al obtener préstamos:", error);
+    });
+}, 
   methods: {
-    confirmarPrestamo(index) {
-      this.prestamos.splice(index, 1);
-      alert("Préstamo confirmado.");
-    },
-  },
+    format
+  }
 };
 </script>
 

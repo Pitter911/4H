@@ -2,39 +2,22 @@
   <h1 class="titulo">Lista de Herramientas</h1>
   <div class="lista-herramientas">
     <div class="herramientas-container">
-      <div 
-        v-for="herramienta in herramientas" 
-        :key="herramienta.id" 
-        class="herramienta-card"
-      >
-        <img 
-          :src="herramienta.imagenURL" 
-          alt="Imagen de la herramienta" 
-          class="herramienta-imagen"
-        />
+      <div v-for="herramienta in herramientas" :key="herramienta.id" class="herramienta-card">
+        <img :src="herramienta.imagenURL" alt="Imagen de la herramienta" class="herramienta-imagen" />
         <h2>{{ herramienta.nombre }}</h2>
         <p>{{ herramienta.descripcion }}</p>
         <p><strong>Stock:</strong> {{ herramienta.stock }}</p>
         <p><strong>Agregado el:</strong> {{ herramienta.fechaFormateada }}</p>
-        
+
         <!-- Botón para solicitar préstamo -->
-        <button 
-          v-if="isLoggedIn" 
-          @click="solicitarPrestamo(herramienta)" 
-          :disabled="herramienta.stock <= 0"
-        >
+        <button v-if="isLoggedIn" @click="solicitarPrestamo(herramienta)" :disabled="herramienta.stock <= 0">
           Solicitar Préstamo
         </button>
 
         <!-- Formulario para modificar cantidad de préstamo -->
         <div v-if="herramienta.prestamoSolicitado">
-          <p><strong>Cantidad solicitada:</strong> 
-            <input 
-              v-model.number="herramienta.cantidadSolicitada" 
-              type="number" 
-              min="1" 
-              :max="herramienta.stock"
-            />
+          <p><strong>Cantidad solicitada:</strong>
+            <input v-model.number="herramienta.cantidadSolicitada" type="number" min="1" :max="herramienta.stock" />
           </p>
           <button @click="confirmarPrestamo(herramienta)">Confirmar Préstamo</button>
         </div>
@@ -44,7 +27,7 @@
 </template>
 
 <script>
-import apiService from "@/services/apiService"; 
+import apiService from "@/services/apiService";
 import { format } from "date-fns"; // Asegúrate de instalar date-fns si no lo tienes
 
 export default {
@@ -77,37 +60,48 @@ export default {
       });
   },
   methods: {
-    solicitarPrestamo(herramienta) {
-      // Marca que se ha solicitado el préstamo
-      herramienta.prestamoSolicitado = true;
-      // Deshabilitar botón de préstamo si el stock es 0
-      if (herramienta.stock <= 0) {
-        alert("No hay stock disponible para préstamo.");
-      }
-    },
-    confirmarPrestamo(herramienta) {
-      // Verificar que la cantidad solicitada es válida
-      if (herramienta.cantidadSolicitada <= 0 || herramienta.cantidadSolicitada > herramienta.stock) {
-        alert("Cantidad no válida.");
-        return;
-      }
+  getUsuarioId() {
+    // Aquí puedes reemplazar con tu lógica para obtener el ID del usuario logueado
+    // Por ejemplo, si usas Vuex o almacenamiento local
+    return 1; // ID simulado de un usuario
+  },
 
-      // Reducir el stock de la herramienta
-      herramienta.stock -= herramienta.cantidadSolicitada;
-
-      // Realizar la solicitud del préstamo (enviar al backend para persistir los cambios)
-      apiService.solicitarPrestamo(herramienta.id, herramienta.cantidadSolicitada)
-        .then(() => {
-          alert("Préstamo confirmado");
-          // Resetear la cantidad solicitada y estado de solicitud
-          herramienta.prestamoSolicitado = false;
-          herramienta.cantidadSolicitada = 1;
-        })
-        .catch((error) => {
-          console.error("Error al confirmar préstamo:", error);
-        });
+  solicitarPrestamo(herramienta) {
+    // Marca que se ha solicitado el préstamo
+    herramienta.prestamoSolicitado = true;
+    // Deshabilitar botón de préstamo si el stock es 0
+    if (herramienta.stock <= 0) {
+      alert("No hay stock disponible para préstamo.");
     }
   },
+
+  confirmarPrestamo(herramienta) {
+    if (herramienta.cantidadSolicitada <= 0 || herramienta.cantidadSolicitada > herramienta.stock) {
+      alert("Cantidad no válida.");
+      return;
+    }
+
+    const usuarioId = this.getUsuarioId(); // Ahora el método getUsuarioId está definido
+    const fechaPrestamo = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+
+    // Llama a la API para registrar el préstamo
+    apiService.registrarPrestamo({
+      usuario_id: usuarioId,
+      herramienta_id: herramienta.id,
+      fecha_prestamo: fechaPrestamo,
+      estado: 'pendiente'
+    })
+      .then(() => {
+        herramienta.stock -= herramienta.cantidadSolicitada;
+        herramienta.prestamoSolicitado = false;
+        herramienta.cantidadSolicitada = 1;
+        alert("Préstamo confirmado y registrado.");
+      })
+      .catch((error) => {
+        console.error("Error al registrar préstamo:", error);
+      });
+  },
+},
 };
 </script>
 
@@ -181,7 +175,7 @@ export default {
     flex: 1 1 100%;
     max-width: 100%;
   }
-  
+
   .herramienta-card h2 {
     font-size: 1rem;
   }

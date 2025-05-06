@@ -30,10 +30,20 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> createUsuario(@RequestBody Usuario usuario) {
+        // Asigna automáticamente el rol "alumno"
+        Optional<Roles> rolAlumnoOpt = rolesRepository.findById(2); // <- Usar Integer, no Long
+    
+        if (rolAlumnoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Error: El rol 'alumno' no está configurado en la base de datos.");
+        }
+    
+        usuario.setRoles(rolAlumnoOpt.get());
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
         return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
     }
+    
 
     // Nuevo endpoint para actualizar el rol de un usuario
     @PutMapping("/{id}/rol")
