@@ -18,7 +18,11 @@ export default {
         return api.post("/usuarios", usuario);
     },
     // Método para obtener todas las herramientas (Agregado)
-  getHerramientas() {
-    return api.get("/herramientas");
-  }
+    getHerramientas() {
+        return api.get("/herramientas");
+    },
+    // Método para registrar un prestamo (Agregado)
+    registrarPrestamo(prestamo) {
+        return api.post("/prestamos", prestamo);
+    }
 }
