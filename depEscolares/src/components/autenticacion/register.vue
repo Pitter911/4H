@@ -3,21 +3,14 @@
     <div class="card">
       <h1>Registro</h1>
       <form @submit.prevent="submitForm">
-        <div 
-          v-for="(field, key) in formFields" 
-          :key="key" 
-          class="form-group"
-        >
+        <div v-for="(field, key) in formFields" :key="key" class="form-group">
           <label :for="key">{{ field.label }}</label>
-          <input 
-            :type="field.type" 
-            :id="key" 
-            v-model="form[key]" 
-            :placeholder="field.placeholder" 
-            :required="field.required"
-          />
+          <input :type="field.type" :id="key" v-model="form[key]" :placeholder="field.placeholder"
+            :required="field.required" />
         </div>
-        <button type="submit">Registrar</button>
+        <router-link to="/dashboardAlumno">
+          <button type="button">Registrar</button>
+        </router-link>
       </form>
     </div>
   </div>
@@ -44,22 +37,26 @@ export default {
   methods: {
     submitForm() {
   console.log('Formulario enviado:', this.form);
-  
+
   apiService.registrarUsuario(this.form)
     .then(response => {
       console.log('Usuario registrado con éxito:', response.data);
       alert('Registro exitoso');
-      // Opcionalmente: limpiar formulario o redirigir
+
+      // Limpiar campos
       this.form.nombre = '';
       this.form.email = '';
       this.form.password = '';
+
+      // Redirigir al dashboard
+      this.$router.push('/dashboard-alumno');
     })
     .catch(error => {
       console.error('Error al registrar usuario:', error.response?.data || error.message);
       alert('Error al registrar usuario. Revisa los campos o el servidor.');
     });
-}
-  }
+},
+  }, 
 };
 </script>
 
@@ -85,7 +82,8 @@ h1 {
   font-size: 2.8rem;
   text-align: center;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  color: #333; /* Cambiado a un color oscuro para mejor contraste */
+  color: #333;
+  /* Cambiado a un color oscuro para mejor contraste */
 }
 
 .card {
@@ -113,19 +111,23 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #333; /* Cambiado a un color oscuro */
+  color: #333;
+  /* Cambiado a un color oscuro */
   font-size: 1.2rem;
 }
 
 input {
   width: 100%;
   padding: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.2); /* Bordes oscuros para contraste */
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  /* Bordes oscuros para contraste */
   border-radius: 10px;
   box-sizing: border-box;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.8); /* Fondo claro */
-  color: #333; /* Texto oscuro */
+  background: rgba(255, 255, 255, 0.8);
+  /* Fondo claro */
+  color: #333;
+  /* Texto oscuro */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 

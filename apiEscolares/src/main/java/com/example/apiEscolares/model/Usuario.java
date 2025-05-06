@@ -1,5 +1,7 @@
 package com.example.apiEscolares.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,8 +18,8 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
-     @Column(nullable = false) // Define que no puede ser NULL
+
+    @Column(nullable = false) // Define que no puede ser NULL
     private String nombre;
 
     @Column(nullable = false, unique = true) // Define que no puede ser NULL y debe ser único
@@ -29,6 +32,9 @@ public class Usuario {
     @JoinColumn(name = "rol_id", referencedColumnName = "id", nullable = false)
     private Roles roles;
 
+    @OneToMany(mappedBy = "usuario")
+    @com.fasterxml.jackson.annotation.JsonBackReference
+    private List<Prestamos> prestamos;
 
     public Usuario() {
         // Constructor vacío requerido por JPA
@@ -77,9 +83,16 @@ public class Usuario {
     public Roles getRoles() {
         return roles;
     }
-    
+
     public void setRoles(Roles roles) {
         this.roles = roles;
     }
+
+    public List<Prestamos> getPrestamos() {
+        return prestamos;
+    }
     
+    public void setPrestamos(List<Prestamos> prestamos) {
+        this.prestamos = prestamos;
+    }
 }
