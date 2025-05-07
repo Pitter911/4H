@@ -8,17 +8,19 @@
           <input :type="field.type" :id="key" v-model="form[key]" :placeholder="field.placeholder"
             :required="field.required" />
         </div>
-        <router-link to="/dashboardAlumno">
-          <button type="button">Registrar</button>
-        </router-link>
+        <button type="submit">Registrar</button>
       </form>
+
+      <!-- Mensajes de éxito o error -->
+      <p v-if="registroExitoso" class="success-message">¡Registro exitoso!</p>
+      <p v-if="mensajeError" class="error-message">{{ mensajeError }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import apiService from "@/services/apiService"; // Asegúrate de importar tu servicio API
-import { useRouter } from "vue-router"; // Si estás usando Vue Router
+import apiService from '@/services/apiService';
+
 export default {
   data() {
     return {
@@ -31,36 +33,46 @@ export default {
         nombre: { label: 'Nombre:', type: 'text', placeholder: 'Ingresa tu nombre', required: true },
         email: { label: 'Email:', type: 'email', placeholder: 'Ingresa tu email', required: true },
         password: { label: 'Contraseña:', type: 'password', placeholder: 'Ingresa tu contraseña', required: true }
-      }
+      },
+      registroExitoso: false,
+      mensajeError: ''
     };
   },
   methods: {
-    submitForm() {
-  console.log('Formulario enviado:', this.form);
+    async submitForm() {
+      try {
+        const respuesta = await apiService.registrarUsuario(this.form);
+        console.log('Respuesta del backend:', respuesta);
 
-  apiService.registrarUsuario(this.form)
-    .then(response => {
-      console.log('Usuario registrado con éxito:', response.data);
-      alert('Registro exitoso');
+        this.registroExitoso = true;
+        this.mensajeError = '';
 
-      // Limpiar campos
-      this.form.nombre = '';
-      this.form.email = '';
-      this.form.password = '';
+        // Limpiar formulario
+        this.form = { nombre: '', email: '', password: '' };
 
-      // Redirigir al dashboard
-      this.$router.push('/dashboard-alumno');
-    })
-    .catch(error => {
-      console.error('Error al registrar usuario:', error.response?.data || error.message);
-      alert('Error al registrar usuario. Revisa los campos o el servidor.');
-    });
-},
-  }, 
+        // Redirigir después de un tiempo
+        setTimeout(() => {
+          this.registroExitoso = false;
+          this.$router.push('/dashboardAlumno');
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error al registrar:', error);
+        this.mensajeError = 'Error al registrar usuario. Revisa los campos.';
+        this.registroExitoso = false;
+
+        setTimeout(() => {
+          this.mensajeError = '';
+        }, 4000);
+      }
+    }
+  }
 };
 </script>
 
+
 <style scoped>
+/* Tu estilo ya incluido */
 .registro-container {
   display: flex;
   justify-content: center;
@@ -83,7 +95,6 @@ h1 {
   text-align: center;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   color: #333;
-  /* Cambiado a un color oscuro para mejor contraste */
 }
 
 .card {
@@ -112,7 +123,6 @@ label {
   margin-bottom: 8px;
   font-weight: bold;
   color: #333;
-  /* Cambiado a un color oscuro */
   font-size: 1.2rem;
 }
 
@@ -120,14 +130,11 @@ input {
   width: 100%;
   padding: 14px;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  /* Bordes oscuros para contraste */
   border-radius: 10px;
   box-sizing: border-box;
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.8);
-  /* Fondo claro */
   color: #333;
-  /* Texto oscuro */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -158,5 +165,38 @@ button:hover {
 button:active {
   background-color: #0d47a1;
   transform: scale(0.98);
+}
+
+/* ✅ Mensajes */
+.success-message {
+  margin-top: 20px;
+  color: green;
+  font-weight: bold;
+  animation: fadeInOut 3s ease forwards;
+}
+
+.error-message {
+  margin-top: 20px;
+  color: red;
+  font-weight: bold;
+  animation: fadeInOut 4s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 </style>

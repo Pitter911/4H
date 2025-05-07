@@ -1,12 +1,13 @@
 <template>
   <div class="login-container">
     <div class="grid-container">
-      <!-- Primera tarjeta -->
+      <!-- Texto de bienvenida -->
       <div class="welcome-text">
         <h2>Bienvenidos a escolares!</h2>
-        <p>Por favor inicie sesion!</p>
+        <p>Por favor inicie sesión!</p>
       </div>
-      <br />
+
+      <!-- Formulario de inicio de sesión -->
       <div class="grid-item">
         <div class="form-group">
           <label for="email">Correo Electrónico</label>
@@ -19,8 +20,11 @@
             aria-label="Correo Electrónico"
             aria-describedby="emailHelp"
           />
-          <small id="emailHelp" class="form-text">Nunca compartiremos tu correo electrónico.</small>
+          <small id="emailHelp" class="form-text">
+            Nunca compartiremos tu correo electrónico.
+          </small>
         </div>
+
         <div class="form-group">
           <label for="password">Contraseña</label>
           <input
@@ -31,24 +35,34 @@
             required
             aria-label="Contraseña"
           />
-          <button type="button" class="login-button" @click="handleLogin">Ingresar</button>
-
         </div>
+
+        <button type="button" class="login-button" @click="handleLogin">
+          Ingresar
+        </button>
       </div>
 
-      <!-- Segunda tarjeta -->
+      <!-- Botones sociales -->
       <div class="grid-item">
         <div class="form-group">
           <small>Iniciar sesión con:</small>
-          <button type="button" class="login-button" style="background: #3b5998;">Facebook</button>
-          <button type="button" class="login-button" style="background: #db4437;">Google</button>
-          <button type="button" class="login-button" style="background: #1da1f2;">Twitter</button>
+          <button type="button" class="login-button" style="background: #3b5998;">
+            Facebook
+          </button>
+          <button type="button" class="login-button" style="background: #db4437;">
+            Google
+          </button>
+          <button type="button" class="login-button" style="background: #1da1f2;">
+            Twitter
+          </button>
         </div>
       </div>
 
-      <!-- Tercera tarjeta -->
+      <!-- Mensajes adicionales -->
       <div class="grid-item full-width">
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <div v-if="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
         <div class="form-group">
           <small>¿Olvidaste tu contraseña? <a href="#">Recuperar</a></small>
         </div>
@@ -61,8 +75,8 @@
 </template>
 
 <script>
-import apiService from "@/services/apiService"; // Asegúrate de importar tu servicio API
-import { useRouter } from "vue-router"; // Si estás usando Vue Router
+import apiService from "@/services/apiService";
+import { useRouter } from "vue-router";
 
 export default {
   data() {
@@ -86,10 +100,12 @@ export default {
       }
 
       try {
-        const response = await apiService.iniciarSesion(this.form.email, this.form.password);
+        const response = await apiService.iniciarSesion(
+          this.form.email,
+          this.form.password
+        );
         const usuario = response.data;
 
-        // Verificar el rol
         if (usuario.rol === "admin") {
           this.router.push("/dashboardAdmin");
         } else if (usuario.rol === "alumno") {
@@ -97,7 +113,6 @@ export default {
         } else {
           this.errorMessage = "Rol desconocido. Contacta al administrador.";
         }
-
       } catch (error) {
         this.errorMessage = "Credenciales incorrectas o error del servidor.";
         console.error("Error al iniciar sesión:", error);
@@ -105,7 +120,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>
@@ -135,7 +149,7 @@ export default {
   margin: 0 auto;
 }
 
-/* Elementos de la grilla */
+/* Tarjetas */
 .grid-item {
   background: #ffffff;
   padding: 2rem;
@@ -144,23 +158,14 @@ export default {
   text-align: center;
 }
 
-/* Elemento que ocupa todo el ancho */
 .grid-item.full-width {
   grid-column: span 2;
-  padding: 1rem; /* Reducir el padding */
-  max-width: 90%; /* Limitar el ancho máximo */
-  margin: 0 auto; /* Centrar el card */
+  padding: 1rem;
+  max-width: 90%;
+  margin: 0 auto;
 }
 
 /* Títulos */
-h1 {
-  margin-bottom: 1rem;
-  color: #1565c0;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
 h2 {
   margin-bottom: 2rem;
   color: #1e88e5;
@@ -169,7 +174,19 @@ h2 {
   letter-spacing: 0.5px;
 }
 
-/* Grupo de formulario */
+/* Texto de bienvenida */
+.welcome-text {
+  text-align: center;
+  margin-bottom: 2rem;
+  grid-column: span 2;
+}
+
+.welcome-text h2,
+.welcome-text p {
+  color: #000;
+}
+
+/* Formularios */
 .form-group {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -189,8 +206,8 @@ input {
   border: 1px solid #ddd;
   border-radius: 12px;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background: #f9f9f9;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus {
@@ -199,16 +216,7 @@ input:focus {
   box-shadow: 0 0 10px rgba(66, 165, 245, 0.5);
 }
 
-/* Mensaje de error */
-.error-message {
-  color: #d32f2f;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-  font-weight: bold;
-  text-align: left;
-}
-
-/* Botón de login */
+/* Botón principal */
 .login-button {
   width: 100%;
   padding: 1rem;
@@ -232,7 +240,7 @@ input:focus {
   transform: translateY(0);
 }
 
-/* Botones de redes sociales */
+/* Botones sociales */
 .login-button[style] {
   margin-top: 0.5rem;
   font-size: 1rem;
@@ -245,7 +253,16 @@ input:focus {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Enlaces */
+/* Mensaje de error */
+.error-message {
+  color: #d32f2f;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+/* Links */
 a {
   color: #1e88e5;
   text-decoration: none;
@@ -264,50 +281,22 @@ small {
   color: #555;
 }
 
-/* Animación de entrada */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Estilos responsivos */
+/* Responsive */
 @media (max-width: 480px) {
-  .login-card {
-    padding: 2rem;
+  .grid-container {
+    grid-template-columns: 1fr;
   }
 
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.8rem;
+  .grid-item.full-width {
+    grid-column: span 1;
   }
 
   .login-button {
     font-size: 1rem;
   }
-}
 
-/* Estilo para centrar el texto de bienvenida */
-.welcome-text {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.welcome-text h2 {
-  margin-bottom: 0.5rem;
-  color: #000; /* Cambiar color a negro */
-}
-
-.welcome-text p {
-  margin: 0;
-  color: #000; /* Cambiar color a negro */
+  h2 {
+    font-size: 1.5rem;
+  }
 }
 </style>
