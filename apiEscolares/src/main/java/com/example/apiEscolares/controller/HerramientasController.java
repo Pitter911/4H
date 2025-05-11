@@ -36,14 +36,20 @@ public class HerramientasController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 🔒 Acceso solo para administradores (asumido que hay filtro o validación aparte)
+    @GetMapping("/categoria/{categoria}")
+    public List<Herramientas> getHerramientasByCategoria(@PathVariable String categoria) {
+        return herramientasRepository.findByCategoria(categoria);
+    }
+    // 🔒 Acceso solo para administradores (asumido que hay filtro o validación
+    // aparte)
     @PostMapping
     public ResponseEntity<Herramientas> createHerramienta(@RequestBody Herramientas herramienta) {
         return ResponseEntity.ok(herramientasRepository.save(herramienta));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Herramientas> updateHerramienta(@PathVariable Integer id, @RequestBody Herramientas updatedData) {
+    public ResponseEntity<Herramientas> updateHerramienta(@PathVariable Integer id,
+            @RequestBody Herramientas updatedData) {
         Optional<Herramientas> herramientaOpt = herramientasRepository.findById(id);
         if (herramientaOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -55,6 +61,7 @@ public class HerramientasController {
         herramienta.setStock(updatedData.getStock());
         herramienta.setImagenURL(updatedData.getImagenURL());
         herramienta.setFechaAgregado(updatedData.getFechaAgregado());
+        herramienta.setCategoria(updatedData.getCategoria());
 
         return ResponseEntity.ok(herramientasRepository.save(herramienta));
     }

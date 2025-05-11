@@ -27,8 +27,10 @@ public class Herramientas {
     @Column(nullable = false) // Define que no puede ser NULL
     private Integer stock;
 
-    private String imagenURL;
+    @Column(nullable = false)
+    private String categoria;
 
+    private String imagenURL;
 
     @Column(name = "fecha_agregado", nullable = false)
     private LocalDateTime fechaAgregado;
@@ -42,13 +44,14 @@ public class Herramientas {
     }
 
     public Herramientas(Integer id, String nombre, String descripcion, Integer stock, String imagenURL,
-            LocalDateTime fechaAgregado) {
+            LocalDateTime fechaAgregado, String categoria) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.stock = stock;
         this.imagenURL = imagenURL;
         this.fechaAgregado = fechaAgregado;
+        this.categoria = categoria;
     }
 
     public Integer getId() {
@@ -81,6 +84,14 @@ public class Herramientas {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getImagenURL() {
