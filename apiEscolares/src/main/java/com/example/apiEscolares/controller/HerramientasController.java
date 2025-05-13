@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,17 +35,6 @@ public class HerramientasController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/categoria/{categoria}")
-    public List<Herramientas> getHerramientasByCategoria(@PathVariable String categoria) {
-        return herramientasRepository.findByCategoria(categoria);
-    }
-    // 🔒 Acceso solo para administradores (asumido que hay filtro o validación
-    // aparte)
-    @PostMapping
-    public ResponseEntity<Herramientas> createHerramienta(@RequestBody Herramientas herramienta) {
-        return ResponseEntity.ok(herramientasRepository.save(herramienta));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<Herramientas> updateHerramienta(@PathVariable Integer id,
             @RequestBody Herramientas updatedData) {
@@ -61,7 +49,6 @@ public class HerramientasController {
         herramienta.setStock(updatedData.getStock());
         herramienta.setImagenURL(updatedData.getImagenURL());
         herramienta.setFechaAgregado(updatedData.getFechaAgregado());
-        herramienta.setCategoria(updatedData.getCategoria());
 
         return ResponseEntity.ok(herramientasRepository.save(herramienta));
     }

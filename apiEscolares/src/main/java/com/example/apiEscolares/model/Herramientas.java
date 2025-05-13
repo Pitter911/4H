@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -27,9 +29,6 @@ public class Herramientas {
     @Column(nullable = false) // Define que no puede ser NULL
     private Integer stock;
 
-    @Column(nullable = false)
-    private String categoria;
-
     private String imagenURL;
 
     @Column(name = "fecha_agregado", nullable = false)
@@ -39,12 +38,19 @@ public class Herramientas {
     @com.fasterxml.jackson.annotation.JsonBackReference
     private List<Prestamos> prestamos;
 
+    // Relación con Categorías
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    @com.fasterxml.jackson.annotation.JsonManagedReference
+    private Categorias categoria; 
+
+
     public Herramientas() {
         // Constructor vacío requerido por JPA
     }
 
     public Herramientas(Integer id, String nombre, String descripcion, Integer stock, String imagenURL,
-            LocalDateTime fechaAgregado, String categoria) {
+            LocalDateTime fechaAgregado, Categorias categoria) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -86,14 +92,6 @@ public class Herramientas {
         this.stock = stock;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
     public String getImagenURL() {
         return imagenURL;
     }
@@ -116,5 +114,11 @@ public class Herramientas {
 
     public void setPrestamos(List<Prestamos> prestamos) {
         this.prestamos = prestamos;
+    }
+    public Categorias getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(Categorias categoria) {
+        this.categoria = categoria;
     }
 }
