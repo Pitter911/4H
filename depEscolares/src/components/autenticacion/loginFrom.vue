@@ -11,15 +11,8 @@
       <div class="grid-item">
         <div class="form-group">
           <label for="email">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            v-model.trim="form.email"
-            placeholder="Ingresa tu correo"
-            required
-            aria-label="Correo Electrónico"
-            aria-describedby="emailHelp"
-          />
+          <input type="email" id="email" v-model.trim="form.email" placeholder="Ingresa tu correo" required
+            aria-label="Correo Electrónico" aria-describedby="emailHelp" />
           <small id="emailHelp" class="form-text">
             Nunca compartiremos tu correo electrónico.
           </small>
@@ -27,14 +20,8 @@
 
         <div class="form-group">
           <label for="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            v-model.trim="form.password"
-            placeholder="Ingresa tu contraseña"
-            required
-            aria-label="Contraseña"
-          />
+          <input type="password" id="password" v-model.trim="form.password" placeholder="Ingresa tu contraseña" required
+            aria-label="Contraseña" />
         </div>
 
         <button type="button" class="login-button" @click="handleLogin">
@@ -105,11 +92,11 @@ export default {
           this.form.password
         );
         const usuario = response.data;
-
+        localStorage.setItem("usuario", JSON.stringify(usuario));
         if (usuario.rol === "admin") {
           this.router.push("/dashboardAdmin");
         } else if (usuario.rol === "alumno") {
-          this.router.push("/dashboardAlumno");
+          this.router.push("/herramientas");
         } else {
           this.errorMessage = "Rol desconocido. Contacta al administrador.";
         }

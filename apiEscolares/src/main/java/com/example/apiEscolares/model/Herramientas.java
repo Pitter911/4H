@@ -54,6 +54,7 @@ public class Herramientas {
         this.stock = stock;
         this.imagenURL = imagenURL;
         this.fechaAgregado = fechaAgregado;
+        this.categoria = categoria;
     }
 
     public Integer getId() {

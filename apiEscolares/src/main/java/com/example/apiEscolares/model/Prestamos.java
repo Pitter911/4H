@@ -39,7 +39,7 @@ public class Prestamos {
     private Estado estado;
 
     public enum Estado {
-        PENDIENTE, DEVUELTO, ATRASADO
+        pendiente, devuelto, atrasado
     }
 
     public Prestamos() {}

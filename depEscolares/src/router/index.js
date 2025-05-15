@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('@/components/autenticacion/loginFrom.vue'),
     },
     {
+      path: '/listaUsuarios',
+      name: 'listaUsuarios',
+      component: () => import('@/components/Usuarios/listaUsuarios.vue'),
+    },    
+    {
       path: '/register',
       name: 'register',
       component: () => import('@/components/autenticacion/register.vue'),
@@ -113,7 +118,8 @@ const router = createRouter({
       path: '/perfilAdmin',
       name: 'perfilAdmin',
       component: () => import('@/views/administrador/perfilAdmin.vue'),
-    }
+    },
+    
   ],
 })
 

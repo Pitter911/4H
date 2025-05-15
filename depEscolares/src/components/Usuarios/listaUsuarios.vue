@@ -61,15 +61,27 @@ export default {
 
 <style scoped>
 .lista-usuarios {
+  display: flex;
+  flex-direction: column; /* Asegura que los elementos estén en columna */
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
   background: linear-gradient(90deg, #2196f3, #21cbf3);
-  padding: 20px;
   border-radius: 8px;
   color: white;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Añade espacio debajo del encabezado */
 }
 
 .usuarios-table {
