@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -29,20 +31,23 @@ public class Herramientas {
 
     private String imagenURL;
 
-
     @Column(name = "fecha_agregado", nullable = false)
     private LocalDateTime fechaAgregado;
 
     @OneToMany(mappedBy = "herramienta")
-    @com.fasterxml.jackson.annotation.JsonBackReference
     private List<Prestamos> prestamos;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categorias categoria;
+
+    
     public Herramientas() {
         // Constructor vacío requerido por JPA
     }
 
     public Herramientas(Integer id, String nombre, String descripcion, Integer stock, String imagenURL,
-            LocalDateTime fechaAgregado) {
+            LocalDateTime fechaAgregado, Categorias categoria) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -105,5 +110,11 @@ public class Herramientas {
 
     public void setPrestamos(List<Prestamos> prestamos) {
         this.prestamos = prestamos;
+    }
+    public Categorias getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(Categorias categoria) {
+        this.categoria = categoria;
     }
 }

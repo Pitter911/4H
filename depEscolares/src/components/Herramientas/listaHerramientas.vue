@@ -50,19 +50,20 @@ export default {
       this.isLoggedIn = true;
     }, 2000);
 
-    apiService.getHerramientas()
-      .then((response) => {
-        this.herramientas = response.data.map(herramienta => {
-          herramienta.fechaFormateada = format(new Date(herramienta.fechaAgregado), 'dd/MM/yyyy');
-          herramienta.prestamoSolicitado = false; 
-          herramienta.cantidadSolicitada = 1;
-          herramienta.fechaDevolucion = ''; // Inicializamos el campo de fecha de devolución
-          return herramienta;
-        });
-      })
-      .catch((error) => {
-        console.error("Error al cargar herramientas:", error);
-      });
+   apiService.getHerramientas()
+  .then((response) => {
+    console.log("Datos de herramientas:", response.data); // <--- verifica aquí
+    this.herramientas = response.data.map(herramienta => {
+      herramienta.fechaFormateada = format(new Date(herramienta.fechaAgregado), 'dd/MM/yyyy');
+      herramienta.prestamoSolicitado = false;
+      herramienta.cantidadSolicitada = 1;
+      herramienta.fechaDevolucion = '';
+      return herramienta;
+    });
+  })
+  .catch((error) => {
+    console.error("Error al cargar herramientas:", error);
+  });
   },
   methods: {
     getUsuarioId() {
@@ -88,20 +89,38 @@ export default {
         return;
       }
 
+      if (herramienta.cantidadSolicitada > herramienta.stock) {
+        alert("No hay suficiente stock disponible.");
+        return;
+      }
+
       const prestamo = {
         usuario: { id: this.getUsuarioId() },
-        herramienta: { id: this.herramientaSeleccionada.id },
-        fechaPrestamo: new Date().toISOString().split("T")[0], // formato YYYY-MM-DD
-        fechaDevolucion: herramienta.fechaDevolucion, // Fecha de devolución seleccionada
-        estado: "PENDIENTE"
+        herramienta: { id: herramienta.id },
+        fechaPrestamo: new Date().toISOString().split("T")[0],
+        fechaDevolucion: herramienta.fechaDevolucion,
+        estado: "PENDIENTE",
       };
 
+      // Paso 1: Registrar préstamo
       apiService.registrarPrestamo(prestamo)
         .then(() => {
-          alert("Préstamo solicitado con éxito");
+          // Paso 2: Actualizar stock
+          const nuevoStock = herramienta.stock - herramienta.cantidadSolicitada;
+          const herramientaActualizada = {
+            ...herramienta,
+            stock: nuevoStock,
+          };
+
+          return apiService.actualizarHerramienta(herramienta.id, herramientaActualizada);
         })
-        .catch(error => {
-          console.error("Error al registrar préstamo:", error);
+        .then(() => {
+          alert("Préstamo confirmado y stock actualizado.");
+          herramienta.prestamoSolicitado = false;
+          herramienta.stock -= herramienta.cantidadSolicitada;
+        })
+        .catch((error) => {
+          console.error("Error al procesar préstamo:", error);
         });
     },
   },
@@ -183,4 +202,45 @@ export default {
     font-size: 1rem;
   }
 }
+button {
+  background-color: #72BF78;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background-color: #5aa15f;
+}
+
+button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+input[type="number"],
+input[type="date"] {
+  padding: 8px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #ffffffb2;
+  color: #333;
+  font-size: 14px;
+}
+
+input[type="number"]:focus,
+input[type="date"]:focus {
+  outline: none;
+  box-shadow: 0 0 4px #a0d683;
+}
+
 </style>

@@ -53,7 +53,7 @@ export default {
         // Redirigir después de un tiempo
         setTimeout(() => {
           this.registroExitoso = false;
-          this.$router.push('/dashboardAlumno');
+          this.$router.push('/login'); // Cambia la ruta según tu configuración
         }, 2000);
 
       } catch (error) {
