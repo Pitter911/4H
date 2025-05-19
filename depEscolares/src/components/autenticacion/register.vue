@@ -53,11 +53,7 @@ export default {
         // Redirigir después de un tiempo
         setTimeout(() => {
           this.registroExitoso = false;
-<<<<<<< HEAD
           this.$router.push('/login'); // Cambia la ruta según tu configuración
-=======
-          this.$router.push('/login');
->>>>>>> 290c9de60d65f889a2f88a42d964bb0cc11ec9bd
         }, 2000);
 
       } catch (error) {
