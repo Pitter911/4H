@@ -24,10 +24,14 @@ export default {
     // Método para registrar un prestamo (Agregado)
     registrarPrestamo(prestamo) {
         return api.post("/prestamos", prestamo);
-    }, 
+    },
     // Método para actualizar un prestamo (Agregado)
     actualizarHerramienta(id, herramienta) {
         return api.put(`/herramientas/${id}`, herramienta);
+    },
+    // Obtener categorías 
+    getCategorias() {
+        return api.get("/categorias");
     }
 
 }
