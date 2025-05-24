@@ -51,10 +51,7 @@
           {{ errorMessage }}
         </div>
         <div class="form-group">
-          <small>¿Olvidaste tu contraseña? <a href="#">Recuperar</a></small>
-        </div>
-        <div class="form-group">
-          <small>¿No tienes cuenta? <a href="#">Registrarse</a></small>
+          <small>¿No tienes cuenta? <a href="/register">Registrarse</a></small>
         </div>
       </div>
     </div>
