@@ -4,32 +4,52 @@
       <img src="@/assets/tecnm.png" alt="Logotipo" />
     </div>
     <div class="navbar-search">
-      <input type="text" placeholder="Buscar..." v-model="searchQuery" @input="onSearch" />
+      <input
+        type="text"
+        placeholder="Buscar..."
+        v-model="searchQuery"
+        @input="onSearch"
+        aria-label="Buscar"
+      />
     </div>
     <ul class="navbar-links">
-      <li><a href="#historial">Historial</a></li>
-      <li><a href="#prestamos">Préstamos Recientes</a></li>
-      <li><a href="#cuenta">Cuenta</a></li>
+      <li v-for="item in navItems" :key="item.href">
+        <a :href="item.href">
+          <span :class="item.iconClass" v-html="item.icon"></span>
+          {{ item.label }}
+        </a>
+      </li>
     </ul>
-    <button class="navbar-toggle" @click="toggleMenu">
+    <button class="navbar-toggle" @click="toggleMenu" aria-label="Abrir menú">
       ☰
     </button>
     <div class="navbar-menu" v-if="menuOpen">
       <ul>
-        <li><a href="#historial" @click="toggleMenu">Historial</a></li>
-        <li><a href="#prestamos" @click="toggleMenu">Préstamos Recientes</a></li>
-        <li><a href="#cuenta" @click="toggleMenu">Cuenta</a></li>
+        <li v-for="item in navItems" :key="item.href + '-menu'">
+          <a :href="item.href" @click="toggleMenu">{{ item.label }}</a>
+        </li>
       </ul>
     </div>
   </nav>
 </template>
 
 <script>
+const icons = {
+  historial: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>`,
+  prestamos: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 21h-4.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h10" /><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M18 16.5v1.5l.5 .5" /></svg>`,
+  cuenta: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>`
+};
+
 export default {
   data() {
     return {
       searchQuery: '',
       menuOpen: false,
+      navItems: [
+        { label: 'Historial', href: '#historial', icon: icons.historial, iconClass: 'icon-historial' },
+        { label: 'Préstamos Recientes', href: '#prestamos', icon: icons.prestamos, iconClass: 'icon-prestamos' },
+        { label: 'Cuenta', href: '#cuenta', icon: icons.cuenta, iconClass: 'icon-cuenta' }
+      ]
     };
   },
   methods: {
@@ -38,8 +58,8 @@ export default {
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -52,11 +72,11 @@ export default {
   background: linear-gradient(90deg, #2196f3, #21cbf3);
   color: white;
   flex-wrap: wrap;
-  position: fixed; /* Fija la barra en su lugar */
-  top: 0; /* Posición en la parte superior */
-  left: 0; /* Alineación a la izquierda */
-  width: 100%; /* Ocupa toda la anchura */
-  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .navbar-logo img {
@@ -111,6 +131,19 @@ export default {
   text-decoration: none;
   padding: 10px 0;
   display: block;
+}
+
+.icon-historial,
+.icon-prestamos,
+.icon-cuenta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon-historial svg,
+.icon-prestamos svg,
+.icon-cuenta svg {
+  margin-bottom: 2px;
 }
 
 @media (max-width: 768px) {
