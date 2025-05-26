@@ -75,7 +75,7 @@ export default {
         if (usuario.rol === "admin") {
           this.router.push("/dashboardAdmin");
         } else if (usuario.rol === "alumno") {
-          this.router.push("/herramientas");
+          this.router.push("/dashboardAlumno");
         } else {
           this.errorMessage = "Rol desconocido. Contacta al administrador.";
         }
