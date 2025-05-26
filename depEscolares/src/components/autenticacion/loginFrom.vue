@@ -102,108 +102,111 @@ export default {
   max-width: 800px;
   padding: 1.5rem;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
 }
 
 /* Contenedor de la grilla */
 .grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 /* Tarjetas */
 .grid-item {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.grid-item.full-width {
-  grid-column: span 2;
-  padding: 1rem;
-  max-width: 90%;
-  margin: 0 auto;
+.grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* Títulos */
 h2 {
-  margin-bottom: 2rem;
-  color: #1e88e5;
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  font-size: 2.2rem;
+  color: #333;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
+  font-weight: 700;
 }
 
 /* Texto de bienvenida */
 .welcome-text {
-  text-align: center;
   margin-bottom: 2rem;
-  grid-column: span 2;
+  text-align: center;
 }
 
 .welcome-text h2,
 .welcome-text p {
-  color: #000;
+  color: #333;
 }
 
 /* Formularios */
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
   text-align: left;
 }
 
 label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #0d47a1;
-  font-size: 1rem;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
 }
 
 input {
   width: 100%;
-  padding: 0.9rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-sizing: border-box;
   font-size: 1rem;
-  background: #f9f9f9;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus {
-  outline: none;
   border-color: #42a5f5;
+  outline: none;
   box-shadow: 0 0 10px rgba(66, 165, 245, 0.5);
 }
 
 /* Botón principal */
 .login-button {
   width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #42a5f5, #1e88e5);
-  color: #fff;
+  padding: 14px;
+  background-color: #1e88e5;
+  color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1.2rem;
-  font-weight: 600;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 10px;
 }
 
 .login-button:hover {
-  background: linear-gradient(135deg, #1e88e5, #1565c0);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background-color: #1565c0;
+  transform: scale(1.03);
 }
 
 .login-button:active {
-  transform: translateY(0);
+  background-color: #0d47a1;
+  transform: scale(0.98);
 }
 
 /* Botones sociales */
@@ -221,11 +224,18 @@ input:focus {
 
 /* Mensaje de error */
 .error-message {
-  color: #d32f2f;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  margin-top: 10px;
+  color: red;
   font-weight: bold;
+  animation: fadeInOut 4s ease forwards;
   text-align: left;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* Links */
@@ -243,24 +253,16 @@ a:hover {
 
 /* Texto pequeño */
 small {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #555;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
-  .grid-container {
-    grid-template-columns: 1fr;
+  .grid-item {
+    padding: 24px 8px;
+    max-width: 98vw;
   }
-
-  .grid-item.full-width {
-    grid-column: span 1;
-  }
-
-  .login-button {
-    font-size: 1rem;
-  }
-
   h2 {
     font-size: 1.5rem;
   }
