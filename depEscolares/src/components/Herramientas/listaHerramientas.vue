@@ -6,7 +6,13 @@
     <label for="categoriaSelect">Filtrar por categoría:</label>
     <select id="categoriaSelect" v-model="categoriaSeleccionada">
       <option value="">Todas</option>
-      <option v-for="categoria in categorias" :key="categoria" :value="categoria">{{ categoria }}</option>
+      <option
+        v-for="categoria in categorias"
+        :key="categoria"
+        :value="categoria"
+      >
+        {{ categoria }}
+      </option>
     </select>
   </div>
 
@@ -46,8 +52,17 @@
             />
           </p>
           <p><strong>Fecha de devolución:</strong>
-            <input type="date" v-model="herramienta.fechaDevolucion" min="2025-01-01" />
+            <input
+              type="date"
+              v-model="herramienta.fechaDevolucion"
+              :min="fechaHoy"
+              :max="fechaMaximaPermitida"
+            />
           </p>
+          <small class="alerta-fecha">
+            * La fecha de devolución debe ser dentro de los próximos 3 días hábiles
+          </small>
+          <br />
           <button @click="confirmarPrestamo(herramienta)">Confirmar Préstamo</button>
         </div>
       </div>
@@ -57,7 +72,7 @@
 
 <script>
 import apiService from "@/services/apiService";
-import { format } from "date-fns";
+import { format, addDays, isWeekend } from "date-fns";
 
 export default {
   name: "ListaHerramientas",
@@ -67,6 +82,8 @@ export default {
       isLoggedIn: false,
       categoriaSeleccionada: "",
       categorias: [],
+      fechaHoy: this.obtenerFechaHoy(),
+      fechaMaximaPermitida: this.calcularFechaMaxima()
     };
   },
   computed: {
@@ -103,6 +120,21 @@ export default {
       });
   },
   methods: {
+    obtenerFechaHoy() {
+      const hoy = new Date();
+      return format(hoy, "yyyy-MM-dd");
+    },
+    calcularFechaMaxima() {
+      const hoy = new Date();
+      let diasHabiles = 0;
+      let contador = 1;
+      while (diasHabiles < 3) {
+        const dia = addDays(hoy, contador);
+        if (!isWeekend(dia)) diasHabiles++;
+        contador++;
+      }
+      return format(addDays(hoy, contador - 1), "yyyy-MM-dd");
+    },
     getUsuarioId() {
       return 1;
     },
@@ -118,6 +150,12 @@ export default {
         alert("Por favor, selecciona una fecha de devolución.");
         return;
       }
+
+      if (herramienta.fechaDevolucion > this.fechaMaximaPermitida) {
+        alert("La fecha de devolución debe ser dentro de los próximos 3 días hábiles.");
+        return;
+      }
+
       if (herramienta.cantidadSolicitada > herramienta.stock) {
         alert("No hay suficiente stock disponible.");
         return;

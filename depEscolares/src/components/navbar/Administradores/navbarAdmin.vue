@@ -47,10 +47,10 @@ export default {
       searchQuery: '',
       menuOpen: false,
       navItems: [
-        { label: 'Editar Herramientas', href: '/administrador/gestionHerramientas.vue', icon: icons.tools, iconClass: 'icon-tools' },
-        { label: 'Historial Global', href: '/administrador/historialGlobal.vue', icon: icons.history, iconClass: 'icon-history' },
-        { label: 'Gestión Usuarios', href: '/administrador/gestionUsuarios.vue', icon: icons.users, iconClass: 'icon-users' },
-        { label: 'Cuenta', href: '/administrador/cuenta.vue', icon: icons.account, iconClass: 'icon-account' }
+        { label: 'Editar Herramientas', href: '/gestionHerramientas', icon: icons.tools, iconClass: 'icon-tools' },
+        { label: 'Historial Global', href: '/historialGlobal', icon: icons.history, iconClass: 'icon-history' },
+        { label: 'Gestión Usuarios', href: '/gestionUsuarios', icon: icons.users, iconClass: 'icon-users' },
+        { label: 'Cuenta', href: '/perfilAdmin', icon: icons.account, iconClass: 'icon-account' }
       ]
     };
   },
