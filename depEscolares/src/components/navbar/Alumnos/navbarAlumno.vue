@@ -46,9 +46,9 @@ export default {
       searchQuery: '',
       menuOpen: false,
       navItems: [
-        { label: 'Historial', href: '#historial', icon: icons.historial, iconClass: 'icon-historial' },
-        { label: 'Préstamos Recientes', href: '#prestamos', icon: icons.prestamos, iconClass: 'icon-prestamos' },
-        { label: 'Cuenta', href: '#cuenta', icon: icons.cuenta, iconClass: 'icon-cuenta' }
+        { label: 'Historial', href: '/historial', icon: icons.historial, iconClass: 'icon-historial' },
+        { label: 'Préstamos Recientes', href: '/prestamos', icon: icons.prestamos, iconClass: 'icon-prestamos' },
+        { label: 'Cuenta', href: '/perfil', icon: icons.cuenta, iconClass: 'icon-cuenta' }
       ]
     };
   },
