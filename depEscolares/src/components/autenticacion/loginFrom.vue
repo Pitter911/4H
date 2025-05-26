@@ -3,7 +3,7 @@
     <div class="grid-container">
       <!-- Texto de bienvenida -->
       <div class="welcome-text">
-        <h2>Bienvenidos a escolares!</h2>
+        <h2>Bienvenidos a Materiales!</h2>
         <p>Por favor inicie sesión!</p>
       </div>
 
@@ -31,7 +31,7 @@
           {{ errorMessage }}
         </div>
         <div class="form-group">
-          <small>¿No tienes cuenta? <a href="/register">Registrarse</a></small>
+          <small>¿No tienes cuenta? <a href="/register" class="register-link">Registrarse</a></small>
         </div>
       </div>
 
@@ -249,6 +249,26 @@ a {
 a:hover {
   color: #1565c0;
   text-decoration: underline;
+}
+
+.register-link {
+  color: #fff !important;
+  background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+  padding: 3px 14px;
+  border-radius: 16px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(30, 136, 229, 0.12);
+  text-shadow: 0 1px 6px rgba(30, 136, 229, 0.18);
+  transition: background 0.3s, color 0.3s;
+  margin-left: 6px;
+  display: inline-block;
+}
+
+.register-link:hover {
+  background: linear-gradient(90deg, #42a5f5 60%, #1976d2 100%);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(30, 136, 229, 0.18);
 }
 
 /* Texto pequeño */
