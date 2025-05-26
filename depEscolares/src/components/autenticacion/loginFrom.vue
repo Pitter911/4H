@@ -27,26 +27,6 @@
         <button type="button" class="login-button" @click="handleLogin">
           Ingresar
         </button>
-      </div>
-
-      <!-- Botones sociales -->
-      <div class="grid-item">
-        <div class="form-group">
-          <small>Iniciar sesión con:</small>
-          <button type="button" class="login-button" style="background: #3b5998;">
-            Facebook
-          </button>
-          <button type="button" class="login-button" style="background: #db4437;">
-            Google
-          </button>
-          <button type="button" class="login-button" style="background: #1da1f2;">
-            Twitter
-          </button>
-        </div>
-      </div>
-
-      <!-- Mensajes adicionales -->
-      <div class="grid-item full-width">
         <div v-if="errorMessage" class="error-message">
           {{ errorMessage }}
         </div>
@@ -54,6 +34,8 @@
           <small>¿No tienes cuenta? <a href="/register">Registrarse</a></small>
         </div>
       </div>
+
+
     </div>
   </div>
 </template>
